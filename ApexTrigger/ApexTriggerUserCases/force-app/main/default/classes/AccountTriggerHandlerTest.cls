@@ -6,17 +6,16 @@ public  class AccountTriggerHandlerTest
     public static void updateRatingTest()
     {
         //Create Sample Data for the Test
-       
         //Create the List of Account
         List<Account> accLists = new List<Account>();
         //Taking Loop in order to create Test Data 
-        for(Integer i = 0; i <= 201; i++ )
+        for(Integer i=0;i<201;i++)
         {   
             //Create Account class Object 
             Account acc = new Account();
             //Assigning the objects values
             acc.Name = 'Test'+i;
-            acc.Industry = 'Enegery';
+            acc.Industry = 'Energy';
             //adding all the object inside the list 
             accLists.add(acc);
         }
@@ -24,8 +23,15 @@ public  class AccountTriggerHandlerTest
         insert accLists;
         Test.stopTest();
        
-        List<Account> updateAccList = [Select Id, Rating From Account Where ID =: accLists[0].Id];
+        List<Account> updateAccList = [Select Id, Rating From Account Where ID =: accLists];
         //apply assert condition 
-        System.assertEquals('Hot', updateAccList[0].Rating);
+        
+        //Checking that total 201 records are created or not
+        System.assertEquals(201, updateAccList.size());
+
+        for(Account acc : updateAccList )
+        {   //checking each records are created or not
+            System.assertEquals('Hot', acc.Rating);
+        }
     }
 }
