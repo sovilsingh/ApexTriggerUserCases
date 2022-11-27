@@ -33,4 +33,29 @@ public class AccountTriggerHandler
        }
    }
 
+   Public Static void CreateRelatedAccountContact(List<Account> accList)
+   {
+      
+    List<Contact> conList = new List<Contact>();
+    for(Account acc : accList)
+    {
+      Contact con = new Contact();
+      con.LastName = acc.Name;
+      //There's a method isEmpty(String), 
+      //which returns true if string is null or empty. 
+      //Unlike isBlank(String), returns false if string is white spaces.
+      if(String.isEmpty(acc.Phone))
+      {
+        con.Phone = acc.Phone;
+      }
+       con.AccountID = acc.Id;
+      conList.add(con);   
+    }
+    // if(!conList.isEmpty());
+    if(conList.size() > 0)
+    {
+      Insert conList;
+    }   
+   }
+
 }

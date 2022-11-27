@@ -1,3 +1,7 @@
+/**
+ * assertEquals(expected, actual, msg)
+ */
+
 @isTest
 public  class AccountTriggerHandlerTest 
 {
@@ -73,5 +77,40 @@ public  class AccountTriggerHandlerTest
             System.assertEquals(acc.ShippingStreet, acc.BillingStreet);
         }
 
+    }
+    
+    @isTest
+    public Static Void CreateRelatedAccountContactTest()
+    {
+       
+        List<Account> accList = new List<Account>();
+
+        for(Integer i=0;i<201;i++)
+        {
+          Account acc = new Account();
+          acc.Name = 'Test'+i;
+          accList.add(acc);
+        }
+
+        Test.startTest();
+        Insert accList;
+        Test.stopTest();
+
+        List<Contact> conList = [Select Id, lastName, AccountId From Contact 
+                                 Where AccountId IN : accList];
+  
+        System.assertEquals(201, conList.size());
+
+
+        Map<id,String> contactTestMap = new Map<Id,String>();
+        for(Contact con : conList)
+        {
+            contactTestMap.put(con.AccountID,con.LastName);
+        }
+       
+        for(Account acc : accList)
+        {
+            System.assertEquals(acc.Name,contactTestMap.get(acc.id));
+        }
     }
 }
