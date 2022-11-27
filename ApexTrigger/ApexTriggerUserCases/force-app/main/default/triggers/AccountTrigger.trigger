@@ -13,6 +13,10 @@
  * Trigger Scenario
  * When an Account record is created then Create a related Contact as well.
  * 
+ * Trigger Scenario
+ * When an Account recgrd is created then Create a
+ * related Opportunity as well.
+ * 
  * Note :- 
  * 
  * There's a method isEmpty(String), 
@@ -31,5 +35,6 @@ trigger AccountTrigger on Account (before insert, After Insert)
     {
         
         AccountTriggerHandler.CreateRelatedAccountContact(Trigger.new);
+        AccountTriggerHandler.CreateRelatedAccountOpportunity(Trigger.New);
     }
 }

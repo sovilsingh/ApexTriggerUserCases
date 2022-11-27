@@ -113,4 +113,40 @@ public  class AccountTriggerHandlerTest
             System.assertEquals(acc.Name,contactTestMap.get(acc.id));
         }
     }
+    
+    @isTest
+    public static void CreateRelatedAccountOpportunityTest()
+    {
+
+       List<Account> accList = new List<Account>();
+       
+       for(Integer i = 0;i < 201;i++)
+       {
+        Account acc = new Account();
+        acc.Name = 'Test'+i;
+        accList.add(acc);
+       }
+
+       Test.startTest();
+       Insert accList;
+       Test.stopTest();
+
+       List<Opportunity> oppListToTest = [Select Id, Name, AccountId From Opportunity 
+                                          where AccountId IN : accList];
+
+       System.assertEquals(oppListToTest.size(),201);
+
+       Map<Id,String> oppMap = new Map<Id,String>();
+
+       for(Opportunity opp : oppListToTest)
+       {
+        oppMap.put(opp.AccountID, opp.Name);
+       }
+
+       for(Account acc : accList)
+       {
+        System.assertEquals(acc.Name, oppMap.get(acc.id));
+       }
+
+    }
 }

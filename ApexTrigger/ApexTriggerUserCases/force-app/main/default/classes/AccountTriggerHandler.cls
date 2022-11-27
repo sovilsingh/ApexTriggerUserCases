@@ -58,4 +58,26 @@ public class AccountTriggerHandler
     }   
    }
 
+   public static void CreateRelatedAccountOpportunity(List<Account> accList)
+   {
+       
+     List<Opportunity> oppList = new List<Opportunity>();
+
+     for(Account acc : accList)
+     {
+       Opportunity opp = new Opportunity();
+       opp.Name = acc.Name;
+       //Note we can give like this when we have to give for next 30 days
+       opp.CloseDate = System.Today() + 30;
+       opp.StageName = 'Prospecting';
+       opp.AccountID = acc.Id;
+       oppList.add(opp);
+     }
+
+      if(oppList.size()>0)
+      {
+        Insert oppList;
+      }
+   }
+
 }
