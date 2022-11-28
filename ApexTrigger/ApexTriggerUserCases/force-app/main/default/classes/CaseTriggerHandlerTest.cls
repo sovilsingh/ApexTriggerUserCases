@@ -87,4 +87,54 @@ public  class CaseTriggerHandlerTest
         
     }
 
+    @isTest
+    Public Static Void UpdateLatestCaseNumberWithAccountandCaseTest()
+    {
+  
+     List<Case> caseList = new List<case>();
+     List<Account> accList = new List<Account>();
+
+     for(Integer i=0;i<201;i++)
+     {
+      Account acc = new Account();
+      acc.Name = 'Test '+i;
+      accList.add(acc);
+     }
+
+     Insert accList;
+      
+      for(Account acc : accList)
+      {
+        Case cs = New Case();
+        cs.Status = 'New';
+        cs.Origin = 'Email';
+        cs.AccountId = acc.id;
+        caseList.add(cs);
+      }
+      
+      Test.startTest();
+      Insert caseList;
+      Test.stopTest();
+
+      List<Case> caseListToTest = [Select Id, CaseNumber, AccountID From Case Where ID IN : caseList];
+
+      List<Account> accountListToTest = [Select Id, Latest_Case_Number__c From Account Where ID IN : accList];
+
+      System.assertEquals(caseListToTest.size(),201);
+      System.assertEquals(accountListToTest.size(),201);
+
+      Map<id,String> accountMap = new Map<Id,String>();
+
+      for(Account acc : accountListToTest )
+      {
+        accountMap.put(acc.id,acc.Latest_Case_Number__c);
+      }
+
+      for(Case cs : caseListToTest)
+      {
+        System.assertEquals(cs.CaseNumber, accountMap.get(cs.AccountID));
+      }
+
+    }
+
 }
