@@ -17,4 +17,36 @@ public  class OpportunityTriggerHandler
 
     }
 
+    Public Static void UpdateLatestAmountInAccount(List<Opportunity> oppList)
+    {
+        
+       List<Account> accList = new List<Account>();
+      
+      // Set<id> oppAccountids = new Set<Id>();
+       Map<Id,Double> oppMap = new Map<ID,Double>();
+       for(Opportunity opp : oppList)
+       {
+          //oppAccountids.add(opp.AccountId);
+          oppMap.put(opp.AccountId,opp.Amount);
+       }
+
+       List<Account> accListToUpdate = [Select Id, Latest_Opportunity_Amount__c from Account Where ID IN : oppMap.keyset()];
+
+
+       if(accListToUpdate.size() > 0)
+       {
+        for(Account acc : accListToUpdate)
+        {
+          acc.Latest_Opportunity_Amount__c = oppMap.get(acc.id);
+          accList.add(acc);
+        }
+       }
+
+       if(!accList.isEmpty())
+       {
+        Update accList;
+       }
+      
+    }
+
 }
