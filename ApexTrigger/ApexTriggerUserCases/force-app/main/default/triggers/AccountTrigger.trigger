@@ -1,24 +1,40 @@
 /**   
  * Trigger Scenario 
+ * =========================
  * Upon Account record creation if Industry field is having
  * value as ‘Media’ or ‘Energy’ then populate Rating as ‘Hot’.
  *
  *  
  * Trigger Scenario
+ * ======================
  * When an Account record is created and
  * CopyBillingToShipping checkbox is checked then copy
  * Account Billing Address to Shipping Address.
  * 
  * 
  * Trigger Scenario
+ * =======================
  * When an Account record is created then Create a related Contact as well.
  * 
  * Trigger Scenario
+ * =========================
  * When an Account recgrd is created then Create a
  * related Opportunity as well.
  * 
- * Note :- 
+ * Trigger Scenario with Test Class
+ * ========================================
+ * 1 - On Account two checkbox fields are available:
+ *     - New Contact and New Opportunity
+ * 2 - On Account Creation
+ *     - if New Contact checkbox is checked then a related
+ *       Contact should be created.
+ *	   - If New Opportunity checkbox is checked and
+ *       Active = Yes, then a related Opportunity should be
+ *        created.
  * 
+ * Note :-
+ * ================= 
+ *
  * There's a method isEmpty(String), 
  * which returns true if string is null or empty. 
  * Unlike isBlank(String), returns false if string is white spaces.
@@ -36,5 +52,6 @@ trigger AccountTrigger on Account (before insert, After Insert)
         
         AccountTriggerHandler.CreateRelatedAccountContact(Trigger.new);
         AccountTriggerHandler.CreateRelatedAccountOpportunity(Trigger.New);
+        AccountTriggerHandler.CreateRelatedContactOrOpportunityOrBoth(Trigger.New);
     }
 }

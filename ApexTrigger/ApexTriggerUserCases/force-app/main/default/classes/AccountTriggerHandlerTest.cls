@@ -149,4 +149,60 @@ public  class AccountTriggerHandlerTest
        }
 
     }
+    
+    @isTest
+    public static void CreateRelatedContactOrOpportunityOrBoth()
+    {
+         List<Account> accList = new List<Account>();
+
+         for(Integer i=0;i<201;i++)
+         {
+            Account acc = new Account();
+            acc.Name = 'Test'+i;
+            acc.New_Contact__c = True;
+            acc.Active__c = 'Yes';
+            acc.New_Opportunity__c = True;
+            accList.add(acc);
+         }
+
+         Test.startTest();
+         Insert accList;
+         System.debug(accList.size());
+         Test.stopTest();
+
+         Set<id> accIds = new Set<ID>();
+         for(Account acc: accList)
+         {
+             accIds.add(acc.id);
+         }
+         
+         List<Contact> conListToTest = [Select ID, LastName, AccountID from contact where AccountID IN : accIds];
+
+         System.debug(conListToTest.size());
+
+         List<Opportunity> oppListToTest = [Select ID, Name, AccountID from Opportunity where AccountID IN : accIds];
+
+         System.debug(oppListToTest.size());
+
+         Map<Id,String> oppMapToTest = new Map<ID,String>();
+         for(Opportunity opp : oppListToTest)
+         {
+           oppMapToTest.put(opp.AccountID,opp.Name);
+         }
+
+         Map<Id,String> ConMapToTest = new Map<ID,String>();
+         for(Contact con : conListToTest)
+         {
+            ConMapToTest.put(con.AccountID,con.LastName);
+         }
+
+         System.assertEquals(accList.size(),201);
+         System.assertEquals(conListToTest.size(),201);
+         System.assertEquals(oppListToTest.size(),201);
+         for(Account acc: accList)
+         {
+           System.assertEquals(acc.Name,oppMapToTest.get(acc.id));
+           System.assertEquals(acc.Name,ConMapToTest.get(acc.id));
+         }
+    } 
 }

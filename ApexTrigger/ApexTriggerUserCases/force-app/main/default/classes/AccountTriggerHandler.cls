@@ -76,6 +76,49 @@ public class AccountTriggerHandler
 
       if(oppList.size()>0)
       {
+       Insert oppList;
+      }
+   }
+
+   public Static void CreateRelatedContactOrOpportunityOrBoth(List<Account> accList)
+   {
+
+      List<Contact> conList = new List<Contact>();
+      List<Opportunity> oppList = new List<Opportunity>();
+
+      for(Account acc : accList)
+      {
+        if(acc.New_Contact__c == true)
+        {
+           Contact con = new Contact();
+           con.LastName = acc.Name;
+           if(String.isEmpty(acc.Phone))
+           {
+            con.Phone = acc.Phone;
+           }
+           con.AccountID = acc.id;
+           conList.add(con);
+        }
+
+        if(acc.Active__c == 'Yes' && acc.New_Opportunity__c == true)
+        {
+           Opportunity opp = new Opportunity();
+           opp.Name = acc.Name;
+           //Note we can give like this when we have to give for next 30 days
+           opp.CloseDate = System.Today() + 30;
+           opp.StageName = 'Prospecting';
+           opp.AccountID = acc.Id;
+           oppList.add(opp);
+        }
+      }
+
+      if(conList.size()>0)
+      {
+        Insert conList;
+      }
+
+      if(oppList.size()>0)
+      {
         Insert oppList;
       }
    }
