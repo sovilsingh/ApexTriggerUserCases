@@ -123,4 +123,15 @@ public class AccountTriggerHandler
       }
    }
 
+   Public static void UpdateAccountDescription(List<Account> accList, Map<Id,Account> accListOldMap)
+   {
+        for(Account acc : accList)
+        {
+          if(acc.Phone != accListOldMap.get(acc.id).Phone)
+          {
+             acc.description = 'Phone is Updated!'+' and Old Value: '+ accListOldMap.get(acc.id).Phone+' & New Value : '+acc.Phone;
+          }
+        }
+   }
+
 }

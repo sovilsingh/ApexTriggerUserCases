@@ -32,6 +32,12 @@
  *       Active = Yes, then a related Opportunity should be
  *        created.
  * 
+ * Trigger Scenario with Test Class
+ * ===========================================
+ * When Account’s, phone field is updated then populate
+ * below message in description field:
+ * Phone is Updated! and Old Value: XXX & New Value : XXX
+ * 
  * Note :-
  * ================= 
  *
@@ -39,7 +45,7 @@
  * which returns true if string is null or empty. 
  * Unlike isBlank(String), returns false if string is white spaces.
  */
-trigger AccountTrigger on Account (before insert, After Insert) 
+trigger AccountTrigger on Account (before insert, After Insert, Before Update) 
 {
     if(Trigger.isBefore && Trigger.isInsert)
     {
@@ -53,5 +59,10 @@ trigger AccountTrigger on Account (before insert, After Insert)
         AccountTriggerHandler.CreateRelatedAccountContact(Trigger.new);
         AccountTriggerHandler.CreateRelatedAccountOpportunity(Trigger.New);
         AccountTriggerHandler.CreateRelatedContactOrOpportunityOrBoth(Trigger.New);
+    }
+
+    if(Trigger.isBefore && Trigger.isUpdate)
+    {
+      AccountTriggerHandler.UpdateAccountDescription(Trigger.New,Trigger.OldMap);
     }
 }

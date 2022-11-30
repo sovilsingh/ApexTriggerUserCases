@@ -204,5 +204,60 @@ public  class AccountTriggerHandlerTest
            System.assertEquals(acc.Name,oppMapToTest.get(acc.id));
            System.assertEquals(acc.Name,ConMapToTest.get(acc.id));
          }
-    } 
+    }
+    
+    @isTest
+    Public Static Void UpdateAccountDescription()
+    {
+        List<Account> accList = new List<Account>();
+        List<Account> accListToUpdate = new List<Account>();
+
+        for(Integer i=0;i<201;i++)
+        {
+            Account acc = new Account();
+            acc.Name = 'Test'+i;
+            acc.Phone = '788888'+i;
+            accList.add(acc);
+        }
+
+        //Test.startTest();
+        Insert accList;
+       // Test.stopTest();
+
+        List<Account> accListToTest = [Select ID, Phone, Description From Account where ID IN : accList];
+         
+        for(Account acc : accList)
+        {
+            Acc.Phone = '99999';
+            accListToUpdate.add(acc);
+        }
+
+         Test.startTest();
+         Update accListToUpdate;
+         Test.stopTest();
+         
+         List<Account> accListToTestAfterUpdate = [Select ID, Phone, Description From Account where ID IN : accListToUpdate];
+
+         System.assertEquals(accListToTest.size(),201);
+         System.assertEquals(accListToTestAfterUpdate.size(),201);
+         
+
+         Map<id,String> accListUpdateNewMap = new Map<Id,String>();
+         Map<id,String> accListUpdateOldMap = new Map<Id,String>();
+
+         for(Account acc : accListToTest)
+         {
+            accListUpdateOldMap.put(acc.id,acc.Phone);
+         }
+
+         for(Account acc : accListToTestAfterUpdate)
+         {
+            accListUpdateNewMap.put(acc.id,acc.Phone);
+         }
+
+         for(Account acc : accListToTestAfterUpdate)
+         {
+            System.assertEquals(acc.description,'Phone is Updated!'+' and Old Value: '+ accListUpdateOldMap.get(acc.id)+' & New Value : '+accListUpdateNewMap.get(acc.id));
+         }
+    }
 }
