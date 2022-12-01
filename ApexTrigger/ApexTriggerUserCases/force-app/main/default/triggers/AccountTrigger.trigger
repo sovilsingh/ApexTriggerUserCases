@@ -44,8 +44,16 @@
  * There's a method isEmpty(String), 
  * which returns true if string is null or empty. 
  * Unlike isBlank(String), returns false if string is white spaces.
+ * 
+ * Note :-
+ * ==============
+ * 
+ * Before triggers are used to perform the logic on the same object and it triggers 
+ * fired before the data saved into the database. For DML operation it required to commit with data base. 
+ * So, we cannot use the DML operation on these triggers.
+ * 
  */
-trigger AccountTrigger on Account (before insert, After Insert, Before Update) 
+trigger AccountTrigger on Account (Before Insert, After Insert, Before Update) 
 {
     if(Trigger.isBefore && Trigger.isInsert)
     {
@@ -64,5 +72,6 @@ trigger AccountTrigger on Account (before insert, After Insert, Before Update)
     if(Trigger.isBefore && Trigger.isUpdate)
     {
       AccountTriggerHandler.UpdateAccountDescription(Trigger.New,Trigger.OldMap);
+      AccountTriggerHandler.UpdateCopyBillingToShipping(Trigger.New,Trigger.OldMap); 
     }
 }

@@ -40,7 +40,7 @@ public  class AccountTriggerHandlerTest
     }
     
     @isTest
-    public Static void CopyBillingToShipping()
+    public Static void CopyBillingToShippingTest()
     {
        
         List<Account> accList = new List<Account>();
@@ -151,7 +151,7 @@ public  class AccountTriggerHandlerTest
     }
     
     @isTest
-    public static void CreateRelatedContactOrOpportunityOrBoth()
+    public static void CreateRelatedContactOrOpportunityOrBothTest()
     {
          List<Account> accList = new List<Account>();
 
@@ -207,7 +207,7 @@ public  class AccountTriggerHandlerTest
     }
     
     @isTest
-    Public Static Void UpdateAccountDescription()
+    Public Static Void UpdateAccountDescriptionTest()
     {
         List<Account> accList = new List<Account>();
         List<Account> accListToUpdate = new List<Account>();
@@ -259,5 +259,72 @@ public  class AccountTriggerHandlerTest
          {
             System.assertEquals(acc.description,'Phone is Updated!'+' and Old Value: '+ accListUpdateOldMap.get(acc.id)+' & New Value : '+accListUpdateNewMap.get(acc.id));
          }
+    }
+
+
+     @isTest
+    public Static void UpdateCopyBillingToShippingTest()
+    {
+       
+        List<Account> accList = new List<Account>();
+
+        for(Integer i=0; i<201;i++)
+        {
+               Account acc = new Account();
+               acc.Name = 'Test'+i;
+               acc.CopyBillingToShipping__c = true;
+               acc.BillingCity = 'Test'+i ;
+               acc.BillingCountry = 'Test'+i; 
+               acc.BillingPostalCode = 'Test'+i; 
+               acc.BillingState = 'Test'+i;
+               acc.BillingStreet = 'Test'+i;
+               accList.add(acc);
+        }
+       
+        insert accList;
+       
+        List<Account> updateAccountAfterInsert = new List<Account>();
+        for(Account acc : accList)
+        {
+            acc.CopyBillingToShipping__c = false;
+            updateAccountAfterInsert.add(acc);
+        }
+
+        Update updateAccountAfterInsert;
+
+        List<Account> updateAccListToTest = new List<Account>();
+
+        for(Account acc : accList)
+        {
+               acc.Name = 'Test After Update';
+               acc.CopyBillingToShipping__c = true;
+               acc.BillingCity = 'Test After Update' ;
+               acc.BillingCountry = 'Test After Update'; 
+               acc.BillingPostalCode = 'Test After Update'; 
+               acc.BillingState = 'Test After Update';
+               acc.BillingStreet = 'Test After Update';
+               updateAccListToTest.add(acc);
+        }
+        
+        Test.startTest();
+        Update updateAccListToTest;
+        Test.stopTest();
+        
+        List<Account> updateAccList = [Select Id, BillingCity, BillingCountry, 
+                                       BillingPostalCode, BillingState, BillingStreet,
+                                      ShippingCity, ShippingCountry, ShippingPostalCode,
+                                      ShippingState, ShippingStreet From Account Where ID =: updateAccListToTest];
+
+        System.assertEquals(201, updateAccList.size());
+
+        for(Account acc : updateAccList )
+        {   //checking each records are created or not
+            System.assertEquals(acc.ShippingCity, acc.BillingCity);
+            System.assertEquals(acc.ShippingCountry, acc.BillingCountry);
+            System.assertEquals(acc.ShippingPostalCode, acc.BillingPostalCode);
+            System.assertEquals(acc.ShippingState, acc.BillingState);
+            System.assertEquals(acc.ShippingStreet, acc.BillingStreet);
+        }
+
     }
 }

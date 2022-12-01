@@ -134,4 +134,23 @@ public class AccountTriggerHandler
         }
    }
 
+
+   public static void UpdateCopyBillingToShipping(List<Account> accList, Map<Id,Account> accOldMap)
+   {
+       for(Account acc : accList)
+       {
+             if(acc.CopyBillingToShipping__c == true && accOldMap ==null || acc.CopyBillingToShipping__c == true &&
+                acc.CopyBillingToShipping__c != accOldMap.get(acc.id).CopyBillingToShipping__c)
+             {
+              
+               acc.ShippingCity = acc.BillingCity;
+               acc.ShippingCountry = acc.BillingCountry; 
+               acc.ShippingPostalCode = acc.BillingPostalCode; 
+               acc.ShippingState = acc.BillingState;
+               acc.ShippingStreet = acc.BillingStreet;          
+             }
+       }
+   }
+
+
 }
