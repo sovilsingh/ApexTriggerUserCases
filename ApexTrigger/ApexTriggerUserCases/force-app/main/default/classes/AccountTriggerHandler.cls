@@ -153,4 +153,54 @@ public class AccountTriggerHandler
    }
 
 
+   public static void BeforeupdateRating(List<Account> accList, Map<id,Account> OldAccMap)
+   {  
+          for(Account acc : accList)
+          {
+            If((OldAccMap == null && acc.Industry != null && 
+            acc.Industry == 'Media' 
+            || OldAccMap == null && acc.Industry != null && 
+            acc.Industry == 'Energy')
+            || (acc.Industry != null && acc.Industry == 'Media' &&
+            acc.Industry != OldAccMap.get(acc.Id).Industry ) 
+            ||  (acc.Industry != null && acc.Industry == 'Energy' &&
+            acc.Industry != OldAccMap.get(acc.Id).Industry ))
+            {
+                //Not to do any DMl operation bcz changes are made in before trigger and its own records so
+                //it automatically got commited itself
+                acc.Rating = 'Hot';
+            }
+          }
+   }
+
+   Public static void UpdateAccountPhoneToContact(List<Account> accList, Map<Id,Account> OldAccMap)
+   {
+        List<Contact> conList = new List<Contact>();
+
+        Map<Id,Account> accToAccountMap = new Map<Id,Account>();
+
+        for(Account acc : accList)
+        {
+           if(acc.Phone != null && acc.Phone != OldAccMap.get(acc.id).Phone && OldAccMap != null)
+           {
+             accToAccountMap.put(acc.id,acc);
+           }
+        }
+
+        if(accToAccountMap.size() > 0)
+        {
+          List<Contact> conListToUpdate = [Select ID, Phone, AccountID From Contact Where AccountID IN : accToAccountMap.keyset()];
+          for(Contact con : conListToUpdate)
+          {
+             if(accToAccountMap.containsKey(con.AccountID))
+             {
+                 con.Phone = accToAccountMap.get(con.AccountID).phone;
+                 conList.add(con);
+             }
+          }
+        }
+
+        Update conList;
+   }
+
 }

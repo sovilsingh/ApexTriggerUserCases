@@ -220,7 +220,7 @@ public  class AccountTriggerHandlerTest
             accList.add(acc);
         }
 
-        //Test.startTest();
+        Test.startTest();
         Insert accList;
        // Test.stopTest();
 
@@ -232,7 +232,7 @@ public  class AccountTriggerHandlerTest
             accListToUpdate.add(acc);
         }
 
-         Test.startTest();
+        // Test.startTest();
          Update accListToUpdate;
          Test.stopTest();
          
@@ -281,6 +281,7 @@ public  class AccountTriggerHandlerTest
                accList.add(acc);
         }
        
+        Test.startTest();
         insert accList;
        
         List<Account> updateAccountAfterInsert = new List<Account>();
@@ -306,7 +307,7 @@ public  class AccountTriggerHandlerTest
                updateAccListToTest.add(acc);
         }
         
-        Test.startTest();
+       // Test.startTest();
         Update updateAccListToTest;
         Test.stopTest();
         
@@ -324,6 +325,90 @@ public  class AccountTriggerHandlerTest
             System.assertEquals(acc.ShippingPostalCode, acc.BillingPostalCode);
             System.assertEquals(acc.ShippingState, acc.BillingState);
             System.assertEquals(acc.ShippingStreet, acc.BillingStreet);
+        }
+    }
+
+
+    @isTest
+    public static void BeforeupdateRatingTest()
+    {
+        //Create Sample Data for the Test
+        //Create the List of Account
+        List<Account> accList = new List<Account>();
+        //Taking Loop in order to create Test Data 
+        for(Integer i=0;i<201;i++)
+        {   
+            //Create Account class Object 
+            Account acc = new Account();
+            //Assigning the objects values
+            acc.Name = 'Test'+i;
+          //  acc.Industry = 'Energy';
+            //adding all the object inside the list 
+            accList.add(acc);
+        }
+        
+        Test.startTest();
+        Insert accList;
+       
+        for(Account acc : accList)
+        {
+            acc.Industry = 'Energy';
+        }
+       
+        Update accList;
+        Test.stopTest();
+       
+        List<Account> updateAccList = [Select Id, Rating From Account Where ID =: accList];
+        //apply assert condition 
+        
+        //Checking that total 201 records are created or not
+        System.assertEquals(201, updateAccList.size());
+
+        for(Account acc : updateAccList )
+        {   //checking each records are created or not
+            System.assertEquals('Hot', acc.Rating);
+        }
+    }
+
+    @isTest
+    Public Static Void UpdateAccountPhoneToContactTest()
+    {
+       List<Account> accList = new List<Account>();
+
+       for(Integer i=0;i<201;i++)
+       {
+          Account acc = new Account();
+          acc.Name = 'Test'+i;
+          acc.Phone = '7897897'+i;
+          accList.add(acc);
+       }
+
+        Test.startTest();
+        Insert accList;
+
+         for(Account acc : accList)
+        {
+            acc.Phone = '987987';
+        }
+
+        update accList;
+        Test.stopTest();
+
+        List<Contact> conList = [Select ID, Phone, AccountId From Contact Where AccountID IN : accList];
+
+        Map<Id,String> conMap = new Map<Id,String>();
+
+        for(Contact con : conList)
+        {
+            conMap.put(con.AccountID, con.Phone);
+        }
+
+        System.assertEquals(201,accList.size());
+        System.assertEquals(201,conList.size());
+
+        for(Account acc : accList)
+        {
+            System.assertEquals(acc.Phone, conMap.get(acc.ID));
         }
 
     }

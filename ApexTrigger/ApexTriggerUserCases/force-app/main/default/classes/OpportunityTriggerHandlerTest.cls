@@ -81,4 +81,98 @@ public class OpportunityTriggerHandlerTest
         }
     }
 
+    @isTest
+    public Static void UpdateDescriptionBasedOnStageTest()
+    {
+       
+        List<Opportunity> oppList = new List<Opportunity>();
+        List<opportunity> oppListClosedWon = new List<Opportunity>();
+        List<opportunity> oppListClosedLost = new List<Opportunity>();
+
+        for(Integer i= 0; i < 201; i++)
+        {
+           Opportunity opp = new Opportunity();
+           opp.Name = 'Test'+i;
+           opp.StageName = 'Prospecting'; 
+           opp.CloseDate = System.today();
+           opp.Amount = 200000;
+           oppList.add(opp);
+        }
+
+        Test.startTest();
+        insert oppList;
+
+        for(Opportunity opp : oppList)
+        {
+           opp.StageName = 'Qualification'; 
+        }
+
+
+         Update oppList;
+
+       
+        for(Integer i= 0; i < 201; i++)
+        {
+           Opportunity opp = new Opportunity();
+           opp.Name = 'Test'+i;
+           opp.StageName = 'Qualification';
+           opp.CloseDate = System.today();
+           opp.Amount = 200000;
+           oppListClosedWon.add(opp);
+        }
+
+        Insert oppListClosedWon;
+
+        for(Opportunity opp : oppListClosedWon )
+        {
+           opp.StageName = 'Closed Won'; 
+        }
+
+        update oppListClosedWon;
+    
+        for(Integer i= 0; i < 201; i++)
+        {
+           Opportunity opp = new Opportunity();
+           opp.Name = 'Test'+i;
+           opp.StageName = 'Prospecting'; 
+           opp.CloseDate = System.today();
+           opp.Amount = 200000;
+           oppListClosedLost.add(opp);
+        }
+
+        Insert oppListClosedLost;
+
+        for(Opportunity opp : oppListClosedLost)
+        {
+           opp.StageName = 'Closed Lost'; 
+        }
+
+        update oppListClosedLost;
+        Test.stopTest();
+
+        List<Opportunity> getTestOpportunityOpen = [Select Id, Name, Amount, Description From Opportunity where Id IN : oppList];
+        List<Opportunity> getTestOpportunityClosedWon = [Select Id, Name, Amount, Description From Opportunity where Id IN : oppListClosedWon];
+        List<Opportunity> getTestOpportunityClosedLost = [Select Id, Name, Amount, Description From Opportunity where Id IN : oppListClosedLost];
+
+        System.assertEquals(201,getTestOpportunityOpen.size());
+        System.assertEquals(201,getTestOpportunityClosedWon.size());
+        System.assertEquals(201,getTestOpportunityClosedLost.size());
+
+        for(Opportunity opp : getTestOpportunityOpen)
+        {
+           System.assertEquals('Opportunity is Open', opp.Description);
+        }
+
+        for(Opportunity opp : getTestOpportunityClosedWon)
+        {
+           System.assertEquals('Opportunity is Closed Won', opp.Description);
+        }
+
+        for(Opportunity opp : getTestOpportunityClosedLost)
+        {
+           System.assertEquals('Opportunity is Closed Lost', opp.Description);
+        }
+        
+    }
+
 }

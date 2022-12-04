@@ -38,6 +38,24 @@
  * below message in description field:
  * Phone is Updated! and Old Value: XXX & New Value : XXX
  * 
+ * Trigger Scenario with Test Class
+ * ===========================================
+ * When an Account is inserted or updated and the
+ * CopyBillingToShipping checkbox is checked then copy
+ * billing address to shipping address.
+ * 
+ * Trigger Scenario with Test Class
+ * ========================================
+ * Upon Account creation or updation if Industry is Media
+ * then populate Rating as Hot.
+ * 
+ * Trigger Scenario with Test Class
+ * ======================================
+ * When Account Phone is updated then populate
+ * Account’s Phone Number on all related Contacts in
+ * Home Phone Field.
+ *
+ * 
  * Note :-
  * ================= 
  *
@@ -53,7 +71,7 @@
  * So, we cannot use the DML operation on these triggers.
  * 
  */
-trigger AccountTrigger on Account (Before Insert, After Insert, Before Update) 
+trigger AccountTrigger on Account (Before Insert, After Insert, Before Update, After Update) 
 {
     if(Trigger.isBefore && Trigger.isInsert)
     {
@@ -72,6 +90,12 @@ trigger AccountTrigger on Account (Before Insert, After Insert, Before Update)
     if(Trigger.isBefore && Trigger.isUpdate)
     {
       AccountTriggerHandler.UpdateAccountDescription(Trigger.New,Trigger.OldMap);
-      AccountTriggerHandler.UpdateCopyBillingToShipping(Trigger.New,Trigger.OldMap); 
+      AccountTriggerHandler.UpdateCopyBillingToShipping(Trigger.New,Trigger.OldMap);
+      AccountTriggerHandler.BeforeupdateRating(Trigger.New, Trigger.OldMap); 
+    }
+
+    if(Trigger.isAfter && Trigger.isUpdate)
+    {
+      AccountTriggerHandler.UpdateAccountPhoneToContact(Trigger.New,Trigger.OldMap);
     }
 }
