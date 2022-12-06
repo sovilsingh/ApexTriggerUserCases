@@ -1,5 +1,7 @@
 /**
  * assertEquals(expected, actual, msg)
+ * 
+ *  /// No required directly we can use from update dml list line 310 == Importnant 
  */
 
 @isTest
@@ -311,6 +313,7 @@ public  class AccountTriggerHandlerTest
         Update updateAccListToTest;
         Test.stopTest();
         
+        /// No required directly we can use from update dml list line 310 == Importnant 
         List<Account> updateAccList = [Select Id, BillingCity, BillingCountry, 
                                        BillingPostalCode, BillingState, BillingStreet,
                                       ShippingCity, ShippingCountry, ShippingPostalCode,
@@ -451,6 +454,80 @@ public  class AccountTriggerHandlerTest
         for(Account acc : accList)
         {
             System.assertEquals(acc.Phone, conMap.get(acc.ID));
+        }
+
+    }
+
+
+    @isTest
+    Public Static Void UpdateAccountBillingAddressToContactSOQLTest()
+    {
+       List<Account> accList = new List<Account>();
+
+       for(Integer i=0;i<201;i++)
+       {
+          Account acc = new Account();
+          acc.Name = 'Test';
+          acc.Phone = '7897897';
+          acc.BillingCity = 'Test';
+          acc.BillingCountry = 'Test'; 
+          acc.BillingPostalCode = 'Test'; 
+          acc.BillingState = 'Test';
+          acc.BillingStreet = 'Test';
+          accList.add(acc);
+       }
+
+        Test.startTest();
+        Insert accList;
+
+         for(Account acc : accList)
+        {
+            for(Integer i=0;i<201;i++)
+            {
+                acc.Name = 'Test'+i;
+                acc.Phone = '7897897'+i;
+                acc.BillingCity = 'Test'+i ;
+                acc.BillingCountry = 'Test'+i; 
+                acc.BillingPostalCode = 'Test'+i; 
+                acc.BillingState = 'Test'+i;
+                acc.BillingStreet = 'Test'+i;
+            }
+            
+        }
+
+        update accList;
+        Test.stopTest();
+
+        
+
+        List<Contact> conList = [Select ID, Phone, AccountId,  MailingCity, MailingCountry, MailingPostalCode,
+        MailingState, MailingStreet From Contact Where AccountID IN : accList];
+
+        Map<Id,String> conMapMailingCity = new Map<Id,String>();
+        Map<Id,String> conMapMailingCountry = new Map<Id,String>();
+        Map<Id,String> conMapMailingPostalCode = new Map<Id,String>();
+        Map<Id,String> conMapMailingState = new Map<Id,String>();
+        Map<Id,String> conMapMailingStreet = new Map<Id,String>();
+
+        for(Contact con : conList)
+        {
+            conMapMailingCity.put(con.AccountID, con.MailingCity);
+            conMapMailingCountry.put(con.AccountID, con.MailingCountry);
+            conMapMailingPostalCode.put(con.AccountID, con.MailingPostalCode);
+            conMapMailingState.put(con.AccountID, con.MailingState);
+            conMapMailingStreet.put(con.AccountID, con.MailingStreet);
+        }
+
+        System.assertEquals(201,accList.size());
+        System.assertEquals(201,conList.size());
+
+        for(Account acc : accList)
+        {
+            System.assertEquals(acc.BillingCity, conMapMailingCity.get(acc.ID));
+            System.assertEquals(acc.BillingCountry, conMapMailingCountry.get(acc.ID));
+            System.assertEquals(acc.BillingPostalCode, conMapMailingPostalCode.get(acc.ID));
+            System.assertEquals(acc.BillingState, conMapMailingState.get(acc.ID));
+            System.assertEquals(acc.BillingStreet, conMapMailingStreet.get(acc.ID));
         }
 
     }
