@@ -53,7 +53,7 @@
  * ======================================
  * When Account Phone is updated then populate
  * Account’s Phone Number on all related Contacts in
- * Home Phone Field.
+ * Phone Field.
  *
  * 
  * Note :-
@@ -62,6 +62,20 @@
  * There's a method isEmpty(String), 
  * which returns true if string is null or empty. 
  * Unlike isBlank(String), returns false if string is white spaces.
+ * 
+ * Trigger Scenario with Test Class
+ * ======================================
+ * When Account Phone is updated then populate
+ * Account’s Phone Number on all related Contacts in
+ * Home Phone Field.
+ * Write code using parent-child SOQL.
+ * 
+ * Trigger Scenario with Test Class
+ * ==========================================
+ * When Account Billing Address is updated then populate Account Billing Address on all related
+ * Contacts Mailing Address.
+ * Write code using Map as well as parent-child SOQL.
+ * Implement Trigger and TriggerHandler
  * 
  * Note :-
  * ==============
@@ -96,6 +110,9 @@ trigger AccountTrigger on Account (Before Insert, After Insert, Before Update, A
 
     if(Trigger.isAfter && Trigger.isUpdate)
     {
-      AccountTriggerHandler.UpdateAccountPhoneToContact(Trigger.New,Trigger.OldMap);
+      //AccountTriggerHandler.UpdateAccountPhoneToContact(Trigger.New,Trigger.OldMap);
+      AccountTriggerHandler.UpdateAccountPhoneToContactSOQL(Trigger.New,Trigger.OldMap);
+      //AccountTriggerHandler.UpdateAccountBillingAddressToContact(Trigger.New,Trigger.OldMap);
+      AccountTriggerHandler.UpdateAccountBillingAddressToContactSOQL(Trigger.New,Trigger.OldMap);
     }
 }

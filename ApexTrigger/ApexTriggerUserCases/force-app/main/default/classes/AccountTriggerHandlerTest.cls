@@ -410,6 +410,48 @@ public  class AccountTriggerHandlerTest
         {
             System.assertEquals(acc.Phone, conMap.get(acc.ID));
         }
+    }
+
+    @isTest
+    Public Static Void UpdateAccountPhoneToContactSOQLTest()
+    {
+       List<Account> accList = new List<Account>();
+
+       for(Integer i=0;i<201;i++)
+       {
+          Account acc = new Account();
+          acc.Name = 'Test'+i;
+          acc.Phone = '7897897'+i;
+          accList.add(acc);
+       }
+
+        Test.startTest();
+        Insert accList;
+
+         for(Account acc : accList)
+        {
+            acc.Phone = '987987';
+        }
+
+        update accList;
+        Test.stopTest();
+
+        List<Contact> conList = [Select ID, Phone, AccountId From Contact Where AccountID IN : accList];
+
+        Map<Id,String> conMap = new Map<Id,String>();
+
+        for(Contact con : conList)
+        {
+            conMap.put(con.AccountID, con.Phone);
+        }
+
+        System.assertEquals(201,accList.size());
+        System.assertEquals(201,conList.size());
+
+        for(Account acc : accList)
+        {
+            System.assertEquals(acc.Phone, conMap.get(acc.ID));
+        }
 
     }
 }
