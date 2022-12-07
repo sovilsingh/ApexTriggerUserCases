@@ -2,14 +2,17 @@
  * assertEquals(expected, actual, msg)
  * 
  *  /// No required directly we can use from update dml list line 310 == Importnant 
+ * 
+ * /// https://github.com/alexed1/LightningFlowComponents/issues/367 - 
+ * /// System.DmlException: Insert failed. First exception on row 0; first error: DUPLICATES_DETECTED, Use one of these records?:
  */
-
+  
 @isTest
 public  class AccountTriggerHandlerTest 
 {
     
     @isTest
-    public static void updateRatingTest()
+    Private static void updateRatingTest()
     {
         //Create Sample Data for the Test
         //Create the List of Account
@@ -42,7 +45,7 @@ public  class AccountTriggerHandlerTest
     }
     
     @isTest
-    public Static void CopyBillingToShippingTest()
+    Private Static void CopyBillingToShippingTest()
     {
        
         List<Account> accList = new List<Account>();
@@ -82,7 +85,7 @@ public  class AccountTriggerHandlerTest
     }
     
     @isTest
-    public Static Void CreateRelatedAccountContactTest()
+    Private Static Void CreateRelatedAccountContactTest()
     {
        
         List<Account> accList = new List<Account>();
@@ -117,7 +120,7 @@ public  class AccountTriggerHandlerTest
     }
     
     @isTest
-    public static void CreateRelatedAccountOpportunityTest()
+    Private static void CreateRelatedAccountOpportunityTest()
     {
 
        List<Account> accList = new List<Account>();
@@ -153,7 +156,7 @@ public  class AccountTriggerHandlerTest
     }
     
     @isTest
-    public static void CreateRelatedContactOrOpportunityOrBothTest()
+    Private static void CreateRelatedContactOrOpportunityOrBothTest()
     {
          List<Account> accList = new List<Account>();
 
@@ -209,7 +212,7 @@ public  class AccountTriggerHandlerTest
     }
     
     @isTest
-    Public Static Void UpdateAccountDescriptionTest()
+    Private Static Void UpdateAccountDescriptionTest()
     {
         List<Account> accList = new List<Account>();
         List<Account> accListToUpdate = new List<Account>();
@@ -265,7 +268,7 @@ public  class AccountTriggerHandlerTest
 
 
      @isTest
-    public Static void UpdateCopyBillingToShippingTest()
+     Private Static void UpdateCopyBillingToShippingTest()
     {
        
         List<Account> accList = new List<Account>();
@@ -333,7 +336,7 @@ public  class AccountTriggerHandlerTest
 
 
     @isTest
-    public static void BeforeupdateRatingTest()
+    Private static void BeforeupdateRatingTest()
     {
         //Create Sample Data for the Test
         //Create the List of Account
@@ -374,7 +377,7 @@ public  class AccountTriggerHandlerTest
     }
 
     @isTest
-    Public Static Void UpdateAccountPhoneToContactTest()
+    Private Static Void UpdateAccountPhoneToContactTest()
     {
        List<Account> accList = new List<Account>();
 
@@ -416,7 +419,7 @@ public  class AccountTriggerHandlerTest
     }
 
     @isTest
-    Public Static Void UpdateAccountPhoneToContactSOQLTest()
+    Private Static Void UpdateAccountPhoneToContactSOQLTest()
     {
        List<Account> accList = new List<Account>();
 
@@ -460,42 +463,46 @@ public  class AccountTriggerHandlerTest
 
 
     @isTest
-    Public Static Void UpdateAccountBillingAddressToContactSOQLTest()
+    Private Static Void UpdateAccountBillingAddressToContactSOQLTest()
     {
        List<Account> accList = new List<Account>();
 
        for(Integer i=0;i<201;i++)
        {
           Account acc = new Account();
-          acc.Name = 'Test';
-          acc.Phone = '7897897';
-          acc.BillingCity = 'Test';
-          acc.BillingCountry = 'Test'; 
-          acc.BillingPostalCode = 'Test'; 
-          acc.BillingState = 'Test';
-          acc.BillingStreet = 'Test';
+          acc.Name = 'Test Update'+i+1;
+          acc.Phone = '7897897'+i+1;
+          acc.BillingCity = 'Test'+i+1;
+          acc.BillingCountry = 'Test'+i+1; 
+          acc.BillingPostalCode = 'Test'+i+1; 
+          acc.BillingState = 'Test'+i+1;
+          acc.BillingStreet = 'Test'+i+1;
           accList.add(acc);
        }
 
         Test.startTest();
-        Insert accList;
+        // Insert accList;
+        Database.DMLOptions dml = new Database.DMLOptions(); 
+        dml.DuplicateRuleHeader.AllowSave = true; 
+        List<Database.SaveResult> sr = Database.insert(accList, dml);
 
+        List<Account> accListToUpdate = new List<Account>();
+        
          for(Account acc : accList)
         {
-            for(Integer i=0;i<201;i++)
-            {
-                acc.Name = 'Test'+i;
-                acc.Phone = '7897897'+i;
-                acc.BillingCity = 'Test'+i ;
-                acc.BillingCountry = 'Test'+i; 
-                acc.BillingPostalCode = 'Test'+i; 
-                acc.BillingState = 'Test'+i;
-                acc.BillingStreet = 'Test'+i;
-            }
-            
-        }
+                acc.BillingCity = 'Test';
+                acc.BillingCountry = 'Test'; 
+                acc.BillingPostalCode = 'Test'; 
+                acc.BillingState = 'Test';
+                acc.BillingStreet = 'Test';
+                accListToUpdate.add(acc);
+ 
+        } 
 
-        update accList;
+       
+
+        update accListToUpdate;
+        
         Test.stopTest();
 
         

@@ -2,7 +2,7 @@
 public  class CaseTriggerHandlerTest 
 {
      @isTest
-     Public Static void UpdateLatestCaseNumberTest()
+     Private Static void UpdateLatestCaseNumberTest()
      {
         List<Case> caseList = new List<Case>();
       //  List<Account> accList = new List<Account>();
@@ -59,7 +59,7 @@ public  class CaseTriggerHandlerTest
      }
 
     @isTest
-    Public Static Void UpdateLatestCaseNumberWithAccountTest()
+    Private Static Void UpdateLatestCaseNumberWithAccountTest()
     {
         case cs = new Case();
         cs.AccountID = '0012w000017b8geAAA';
@@ -88,7 +88,7 @@ public  class CaseTriggerHandlerTest
     }
 
     @isTest
-    Public Static Void UpdateLatestCaseNumberWithAccountandCaseTest()
+    Private Static Void UpdateLatestCaseNumberWithAccountandCaseTest()
     {
   
      List<Case> caseList = new List<case>();
