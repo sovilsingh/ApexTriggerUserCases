@@ -2,7 +2,7 @@
 public class OpportunityTriggerHandlerTest 
 {
     @isTest
-    public Static void UpdateDescriptionTest()
+    private Static void UpdateDescriptionTest()
     {
        
         List<Opportunity> oppList = new List<Opportunity>();
@@ -32,7 +32,7 @@ public class OpportunityTriggerHandlerTest
     }
     
     @isTest
-    public Static void UpdateLatestAmountInAccountTest()
+    private Static void UpdateLatestAmountInAccountTest()
     {
       
         List<Account> accList = new List<Account>();
@@ -82,7 +82,7 @@ public class OpportunityTriggerHandlerTest
     }
 
     @isTest
-    public Static void UpdateDescriptionBasedOnStageTest()
+    private Static void UpdateDescriptionBasedOnStageTest()
     {
        
         List<Opportunity> oppList = new List<Opportunity>();
