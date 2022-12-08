@@ -1,5 +1,5 @@
 @isTest
-public class OpportunityTriggerHandlerTest 
+private class OpportunityTriggerHandlerTest 
 {
     @isTest
     private Static void UpdateDescriptionTest()
@@ -173,6 +173,44 @@ public class OpportunityTriggerHandlerTest
            System.assertEquals('Opportunity is Closed Lost', opp.Description);
         }
         
+    }
+
+    @isTest
+    private static void CreateTaskOnOpportunityTest()
+    {
+     
+      List<Opportunity> oppList = new List<Opportunity>();
+
+        for(Integer i= 0; i < 201; i++)
+        {
+           Opportunity opp = new Opportunity();
+           opp.Name = 'Test'+i;
+           opp.StageName = 'Prospecting';
+           opp.CloseDate = System.today();
+           opp.Amount = 200000;
+           oppList.add(opp);
+        }
+
+        Test.startTest();
+        insert oppList;
+        Test.stopTest();
+
+        System.Assert.areEqual(201,oppList.size());
+
+        List<Task> taskList = [Select ID, WhatID, OwnerId from Task Where WhatID IN : oppList];
+
+        Map<Id,ID> taskMap = new Map<ID,ID>();
+
+        for(Task tsk : taskList)
+        {
+          taskMap.put(tsk.WhatID, tsk.OwnerId);
+        }
+
+        for(Opportunity opp : oppList)
+        {
+           System.Assert.areEqual(opp.ID, taskMap.get(opp.id));
+        }
+     
     }
 
 }

@@ -17,9 +17,15 @@
  * -Opportunity is Closed Won or
  * -Opportunity is Open
  * 
+ * Trigger Scenario with Test Class
+ * ==========================================
+ * When an Opportunity Stage is changed, then create a
+ * Task record on Opportunity and assign it to Logged In
+ * User / Opportunity Owner.
+ * 
  */
 
-trigger OpportunityTrigger on Opportunity (Before insert, Before Update, After Insert) 
+trigger OpportunityTrigger on Opportunity (Before insert, Before Update, After Insert, After Update) 
 {
       
       if(trigger.isInsert && trigger.isBefore)
@@ -32,8 +38,13 @@ trigger OpportunityTrigger on Opportunity (Before insert, Before Update, After I
             OpportunityTriggerHandler.UpdateDescriptionBasedOnStage(Trigger.new,Trigger.OldMap);
       }
 
-      if(Trigger.isAFter && Trigger.isInsert)
+      if(Trigger.isAfter && Trigger.isInsert)
       {    
             OpportunityTriggerHandler.UpdateLatestAmountInAccount(Trigger.new);
+      }
+
+      if(Trigger.isAfter && Trigger.isUpdate)
+      {
+           OpportunityTriggerHandler.CreateTaskOnOpportunity(Trigger.New,Trigger.OldMap);
       }
 }

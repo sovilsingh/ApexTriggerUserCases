@@ -1,6 +1,10 @@
-public  class OpportunityTriggerHandler 
+public  class OpportunityTriggerHandler
 {
-    
+   
+    @testVisible static IDml DmlDAOInstance = new DmlBase();
+    @testVisible static IOpportunityDAO oppDAOInstance = new OpportunityDAO();     
+   
+
     public static void UpdateDescription(List<Opportunity> oppList)
     {
 
@@ -30,7 +34,9 @@ public  class OpportunityTriggerHandler
           oppMap.put(opp.AccountId,opp.Amount);
        }
 
-       List<Account> accListToUpdate = [Select Id, Latest_Opportunity_Amount__c from Account Where ID IN : oppMap.keyset()];
+       List<Account> accListToUpdate = oppDAOInstance.getAccountsUpdateLatestAmountInAccount(oppMap.keyset());
+       
+      // List<Account> accListToUpdate = [Select Id, Latest_Opportunity_Amount__c from Account Where ID IN : oppMap.keyset()];
 
 
        if(accListToUpdate.size() > 0)
@@ -44,7 +50,9 @@ public  class OpportunityTriggerHandler
 
        if(!accList.isEmpty())
        {
-        Update accList;
+
+        DmlDAOInstance.updateRecords(accList);
+        //Update accList;
        }
       
     }
@@ -69,6 +77,31 @@ public  class OpportunityTriggerHandler
                 opp.Description = 'Opportunity is Open'; 
             }
           }
+        }
+    }
+
+     Public Static void CreateTaskOnOpportunity(List<Opportunity> oppList, Map<Id,Opportunity> oldOppMap)
+    {
+        List<Task> taskList = new List<Task>();
+        for(Opportunity opp :oppList)
+        {
+            if(opp.StageName != oldOppMap.get(opp.id).StageName)
+            {
+                Task tsk = new Task();
+                tsk.WhatID = opp.ID;  // Related TO 
+                tsk.Subject = 'Demo';
+                tsk.Priority = 'Normal';
+                tsk.Status = 'Not Started';
+                tsk.OwnerId = opp.OwnerId; //or UserInfo.getUserId();
+                taskList.add(tsk);
+            }
+  
+        }
+
+        if(taskList.size()>0)
+        {
+            DmlDAOInstance.insertRecords(taskList);
+            //Insert taskList;
         }
     }
 

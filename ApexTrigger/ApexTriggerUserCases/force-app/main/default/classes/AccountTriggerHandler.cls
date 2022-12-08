@@ -4,6 +4,11 @@ public class AccountTriggerHandler
      * Method to Update the Rating when the Industry field 
      * having value equals to ‘Media’ or ‘Energy’ 
      */
+
+    @testVisible static IDml DmlDAOInstance = new DmlBase();
+    @testVisible static IAccountDOA accountDOAInstance = new AccountDOA();
+    
+       
    public static void updateRating(List<Account> accList)
    {
          
@@ -54,7 +59,8 @@ public class AccountTriggerHandler
     // if(!conList.isEmpty());
     if(conList.size() > 0)
     {
-      Insert conList;
+      DmlDAOInstance.insertRecords(conList);
+      //Insert conList;
     }   
    }
 
@@ -76,7 +82,9 @@ public class AccountTriggerHandler
 
       if(oppList.size()>0)
       {
-       Insert oppList;
+        DmlDAOInstance.insertRecords(oppList);
+       //Insert oppList;
+       
       }
    }
 
@@ -114,12 +122,14 @@ public class AccountTriggerHandler
 
       if(conList.size()>0)
       {
-        Insert conList;
+        DmlDAOInstance.insertRecords(conList);
+       //Insert conList;
       }
 
       if(oppList.size()>0)
       {
-        Insert oppList;
+        DmlDAOInstance.insertRecords(oppList);
+       // Insert oppList;
       }
    }
 
@@ -188,8 +198,8 @@ public class AccountTriggerHandler
         }
 
         if(accToAccountMap.size() > 0)
-        {
-          List<Contact> conListToUpdate = [Select ID, Phone, AccountID From Contact Where AccountID IN : accToAccountMap.keyset()];
+        {                                  
+          List<Contact> conListToUpdate = accountDOAInstance.getContactForUpdateAccountPhoneToContact(accToAccountMap.keyset());
           for(Contact con : conListToUpdate)
           {
              if(accToAccountMap.containsKey(con.AccountID))
@@ -200,7 +210,8 @@ public class AccountTriggerHandler
           }
         }
 
-        Update conList;
+        DmlDAOInstance.updateRecords(conList);
+        //Update conList;
    }
 
 
@@ -235,9 +246,8 @@ public class AccountTriggerHandler
           */
 
           //Using Parent to child SOQL
-        
-          for(Account acc : [Select Id, Phone, (Select Phone From Contacts) 
-                             From Account Where ID IN : accIds])
+          
+          for(Account acc : accountDOAInstance.getContactForUpdateAccountPhoneToContactSOQL(accIds))
             {
               if(acc.contacts != null)
               {
@@ -252,7 +262,8 @@ public class AccountTriggerHandler
 
             if(conList.size() > 0)
             {
-              Update conList;
+              //Update conList;
+              DmlDAOInstance.updateRecords(conList);
             }
    
         }
@@ -274,8 +285,8 @@ public class AccountTriggerHandler
                 accToAccountMap.put(acc.id,acc);
              }
           }
-
-          for(Contact con : [Select ID, AccountID From Contact Where AccountID IN : accToAccountMap.keyset()])
+         
+          for(Contact con : accountDOAInstance.getContactForUpdateAccountBillingAddressToContact(accToAccountMap.keyset()))
           {
                        if(accToAccountMap.containsKey(con.AccountID))
                        {
@@ -292,7 +303,8 @@ public class AccountTriggerHandler
 
           if(conList.size() > 0)
           {
-            Update conList;
+           // Update conList;
+            DmlDAOInstance.updateRecords(conList);
           }
 
         }
@@ -334,8 +346,7 @@ public class AccountTriggerHandler
           }
           */
 
-          for(Account acc : [Select Id, BillingCountry, BillingCity, BillingPostalCode, BillingState, BillingStreet,
-                            (Select ID From Contacts) From Account Where ID IN : accIds])
+          for(Account acc : accountDOAInstance.getContactUpdateAccountBillingAddressToContactSOQL(accIds))
                             {
                               if(acc.Contacts != null)
                               {
@@ -353,7 +364,8 @@ public class AccountTriggerHandler
 
           if(conList.size() > 0)
           {
-            Update conList;
+           // Update conList;
+            DmlDAOInstance.updateRecords(conList);
           }
 
         }
