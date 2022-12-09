@@ -1,6 +1,7 @@
-public class AccountDOA implements IAccountDOA 
+public class AccountDOAMock implements IAccountDOA
 {
- 
+    public List<Account> accountToReturn = new List<Account>();
+
     Public List<contact> getContactForUpdateAccountPhoneToContact(Set<Id> accids)
     {
        return [Select ID, Phone, AccountID From Contact Where AccountID IN : accids];
@@ -24,5 +25,17 @@ public class AccountDOA implements IAccountDOA
     }
 
     public void updateRating(List<Account> accList)
-    {}
+    {
+        for(Account acc : accList)
+          {
+            if(acc.Industry == 'Media' || acc.Industry == 'Energy')
+            {
+                //Not to do any DMl operation bcz changes are made in before trigger and its own records so
+                //it automatically got commited itself
+                acc.Rating = 'Hot';
+            }
+          }
+    }
+     
+
 }

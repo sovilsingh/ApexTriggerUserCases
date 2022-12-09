@@ -4,4 +4,5 @@ public interface IAccountDOA
     List<Account> getContactForUpdateAccountPhoneToContactSOQL(Set<Id> accids);
     List<Contact> getContactForUpdateAccountBillingAddressToContact(Set<Id> accids);
     List<Account> getContactUpdateAccountBillingAddressToContactSOQL(Set<Id> accids);
+    void updateRating(List<Account> accList);
 }

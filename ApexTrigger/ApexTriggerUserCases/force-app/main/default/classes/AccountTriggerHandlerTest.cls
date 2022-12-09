@@ -8,12 +8,13 @@
  */
   
 @isTest
-public  class AccountTriggerHandlerTest 
+public class AccountTriggerHandlerTest 
 {
     
     @isTest
     Private static void updateRatingTest()
     {
+        AccountDOAMock accmock = new AccountDOAMock();
         //Create Sample Data for the Test
         //Create the List of Account
         List<Account> accList = new List<Account>();
@@ -28,20 +29,43 @@ public  class AccountTriggerHandlerTest
             //adding all the object inside the list 
             accList.add(acc);
         }
+
+        //accmock.accountToReturn.add(accList);
+
+       // AccountTriggerHandler acctriggerhandler = new AccountTriggerHandler();
+       // acctriggerhandler.accountDOAInstance = accmock;
+
+      // AccountTriggerHandler acctriggerhandle = new AccountTriggerHandler();
+     //  acctriggerhandle.accountDOAMockInstance = new AccountDOAMock();
+
+       AccountTriggerHandler mock = new AccountTriggerHandler();
+       AccountTriggerHandler.accountDOAMockInstance  = accmock;
+
+        
         Test.startTest();
-        insert accList;
+       // insert accList;
+        mock.updateRating(accList);
         Test.stopTest();
        
-        List<Account> updateAccList = [Select Id, Rating From Account Where ID =: accList];
+        //List<Account> updateAccList = [Select Id, Rating From Account Where ID =: accList];
         //apply assert condition 
         
         //Checking that total 201 records are created or not
-        System.assertEquals(201, updateAccList.size());
+        System.assertEquals(201, accList.size());
 
-        for(Account acc : updateAccList )
-        {   //checking each records are created or not
-            System.assertEquals('Hot', acc.Rating);
-        }
+        //System.assertEquals(201, updateAccList.size());
+
+      //  for(Account acc : updateAccList )
+       // {   //checking each records are created or not
+      ///      System.assertEquals('Hot', acc.Rating);
+      ///  }
+
+           for(Account acc : accList )
+           {   //checking each records are created or not
+               System.assertEquals('Hot', acc.Rating);
+           }
+
+
     }
     
     @isTest

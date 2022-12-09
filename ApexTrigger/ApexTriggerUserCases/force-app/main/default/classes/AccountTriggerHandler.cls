@@ -7,9 +7,11 @@ public class AccountTriggerHandler
 
     @testVisible static IDml DmlDAOInstance = new DmlBase();
     @testVisible static IAccountDOA accountDOAInstance = new AccountDOA();
-    
+    @testVisible static IAccountDOA accountDOAMockInstance = new AccountDOAMock();
+   // @testVisible Static IAccountDOA accountDOAMockInstance = new AccountDOAMock();
        
-   public static void updateRating(List<Account> accList)
+   //public static void updateRating(List<Account> accList)
+   public void updateRating(List<Account> accList)
    {
          
           for(Account acc : accList)
