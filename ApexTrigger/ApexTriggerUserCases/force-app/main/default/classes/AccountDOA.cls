@@ -23,6 +23,4 @@ public class AccountDOA implements IAccountDOA
         (Select ID From Contacts) From Account Where ID IN : accIds];
     }
 
-    public void updateRating(List<Account> accList)
-    {}
 }

@@ -90,11 +90,11 @@ trigger AccountTrigger on Account (Before Insert, After Insert, Before Update, A
   AccountTriggerHandler acchandler = new AccountTriggerHandler();
     if(Trigger.isBefore && Trigger.isInsert)
     {
-           //AccountTriggerHandler.updateRating(Trigger.New);
+            AccountTriggerHandler.updateRating(Trigger.New);
             AccountTriggerHandler.CopyBillingToShipping(Trigger.New);
            
-            acchandler.updateRating(Trigger.New);
-          // acchandler.CopyBillingToShipping(Trigger.New);
+        //    acchandler.updateRating(Trigger.New);
+         //   acchandler.CopyBillingToShipping(Trigger.New);
     }
 
     if(Trigger.isAfter && Trigger.isInsert)
@@ -104,30 +104,31 @@ trigger AccountTrigger on Account (Before Insert, After Insert, Before Update, A
         AccountTriggerHandler.CreateRelatedAccountOpportunity(Trigger.New);
         AccountTriggerHandler.CreateRelatedContactOrOpportunityOrBoth(Trigger.New);
 
-        //acchandler.CreateRelatedAccountContact(Trigger.new);
-        //acchandler.CreateRelatedAccountOpportunity(Trigger.New);
-       // acchandler.CreateRelatedContactOrOpportunityOrBoth(Trigger.New);
+         // acchandler.CreateRelatedAccountContact(Trigger.new);
+        //  acchandler.CreateRelatedAccountOpportunity(Trigger.New);
+        //  acchandler.CreateRelatedContactOrOpportunityOrBoth(Trigger.New);
     }
 
     if(Trigger.isBefore && Trigger.isUpdate)
     {
-       AccountTriggerHandler.UpdateAccountDescription(Trigger.New,Trigger.OldMap);
-       AccountTriggerHandler.UpdateCopyBillingToShipping(Trigger.New,Trigger.OldMap);
-       AccountTriggerHandler.BeforeupdateRating(Trigger.New, Trigger.OldMap); 
+        AccountTriggerHandler.UpdateAccountDescription(Trigger.New,Trigger.OldMap);
+        AccountTriggerHandler.UpdateCopyBillingToShipping(Trigger.New,Trigger.OldMap);
+        AccountTriggerHandler.BeforeupdateRating(Trigger.New, Trigger.OldMap); 
       
-      //acchandler.UpdateAccountDescription(Trigger.New,Trigger.OldMap);
-   //   acchandler.UpdateCopyBillingToShipping(Trigger.New,Trigger.OldMap);
+        //acchandler.UpdateAccountDescription(Trigger.New,Trigger.OldMap);
+      //  acchandler.UpdateCopyBillingToShipping(Trigger.New,Trigger.OldMap);
     //  acchandler.BeforeupdateRating(Trigger.New, Trigger.OldMap); 
 
     }
 
     if(Trigger.isAfter && Trigger.isUpdate)
     {
-      //AccountTriggerHandler.UpdateAccountPhoneToContact(Trigger.New,Trigger.OldMap);
-      AccountTriggerHandler.UpdateAccountPhoneToContactSOQL(Trigger.New,Trigger.OldMap);
-      //AccountTriggerHandler.UpdateAccountBillingAddressToContact(Trigger.New,Trigger.OldMap);
-      AccountTriggerHandler.UpdateAccountBillingAddressToContactSOQL(Trigger.New,Trigger.OldMap);
+         //AccountTriggerHandler.UpdateAccountPhoneToContact(Trigger.New,Trigger.OldMap);
+         AccountTriggerHandler.UpdateAccountPhoneToContactSOQL(Trigger.New,Trigger.OldMap);
+         AccountTriggerHandler.UpdateAccountBillingAddressToContact(Trigger.New,Trigger.OldMap);
+         AccountTriggerHandler.UpdateAccountBillingAddressToContactSOQL(Trigger.New,Trigger.OldMap);
  
+        acchandler.UpdateAccountPhoneToContact(Trigger.New,Trigger.OldMap);
      // acchandler.UpdateAccountPhoneToContactSOQL(Trigger.New,Trigger.OldMap);
      // acchandler.UpdateAccountBillingAddressToContactSOQL(Trigger.New,Trigger.OldMap);
             

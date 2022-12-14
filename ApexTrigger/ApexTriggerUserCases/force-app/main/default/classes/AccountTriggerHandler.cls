@@ -1,17 +1,16 @@
 public class AccountTriggerHandler 
 {
+    
     /**
      * Method to Update the Rating when the Industry field 
      * having value equals to ‘Media’ or ‘Energy’ 
      */
-
-    @testVisible static IDml DmlDAOInstance = new DmlBase();
     @testVisible static IAccountDOA accountDOAInstance = new AccountDOA();
-    @testVisible static IAccountDOA accountDOAMockInstance = new AccountDOAMock();
+  //  @testVisible static IAccountDOA accountDOAMockInstance = new AccountDOAMock();
    // @testVisible Static IAccountDOA accountDOAMockInstance = new AccountDOAMock();
        
    //public static void updateRating(List<Account> accList)
-   public void updateRating(List<Account> accList)
+   public Static void updateRating(List<Account> accList)
    {
          
           for(Account acc : accList)
@@ -25,7 +24,7 @@ public class AccountTriggerHandler
           }
    }
 
-   public static void CopyBillingToShipping(List<Account> accList)
+   public Static void CopyBillingToShipping(List<Account> accList)
    {
        for(Account acc : accList)
        {
@@ -61,12 +60,12 @@ public class AccountTriggerHandler
     // if(!conList.isEmpty());
     if(conList.size() > 0)
     {
-      DmlDAOInstance.insertRecords(conList);
+      insert conList ;
       //Insert conList;
     }   
    }
 
-   public static void CreateRelatedAccountOpportunity(List<Account> accList)
+   public Static void CreateRelatedAccountOpportunity(List<Account> accList)
    {
        
      List<Opportunity> oppList = new List<Opportunity>();
@@ -84,9 +83,7 @@ public class AccountTriggerHandler
 
       if(oppList.size()>0)
       {
-        DmlDAOInstance.insertRecords(oppList);
-       //Insert oppList;
-       
+       Insert oppList;    
       }
    }
 
@@ -124,18 +121,16 @@ public class AccountTriggerHandler
 
       if(conList.size()>0)
       {
-        DmlDAOInstance.insertRecords(conList);
-       //Insert conList;
+        insert conList;
       }
 
       if(oppList.size()>0)
       {
-        DmlDAOInstance.insertRecords(oppList);
-       // Insert oppList;
+        Insert oppList;
       }
    }
 
-   Public static void UpdateAccountDescription(List<Account> accList, Map<Id,Account> accListOldMap)
+   Public Static void UpdateAccountDescription(List<Account> accList, Map<Id,Account> accListOldMap)
    {
         for(Account acc : accList)
         {
@@ -144,10 +139,10 @@ public class AccountTriggerHandler
              acc.description = 'Phone is Updated!'+' and Old Value: '+ accListOldMap.get(acc.id).Phone+' & New Value : '+acc.Phone;
           }
         }
-   }
+   } 
 
 
-   public static void UpdateCopyBillingToShipping(List<Account> accList, Map<Id,Account> accOldMap)
+   public Static void UpdateCopyBillingToShipping(List<Account> accList, Map<Id,Account> accOldMap)
    {
        for(Account acc : accList)
        {
@@ -185,7 +180,7 @@ public class AccountTriggerHandler
           }
    }
 
-   Public static void UpdateAccountPhoneToContact(List<Account> accList, Map<Id,Account> OldAccMap)
+   Public void UpdateAccountPhoneToContact(List<Account> accList, Map<Id,Account> OldAccMap)
    {
         List<Contact> conList = new List<Contact>();
 
@@ -201,7 +196,7 @@ public class AccountTriggerHandler
 
         if(accToAccountMap.size() > 0)
         {                                  
-          List<Contact> conListToUpdate = accountDOAInstance.getContactForUpdateAccountPhoneToContact(accToAccountMap.keyset());
+          List<Contact> conListToUpdate = getContactForUpdateAccountPhoneToContact(accToAccountMap.keyset());
           for(Contact con : conListToUpdate)
           {
              if(accToAccountMap.containsKey(con.AccountID))
@@ -211,9 +206,7 @@ public class AccountTriggerHandler
              }
           }
         }
-
-        DmlDAOInstance.updateRecords(conList);
-        //Update conList;
+         Update conList;
    }
 
 
@@ -264,8 +257,8 @@ public class AccountTriggerHandler
 
             if(conList.size() > 0)
             {
-              //Update conList;
-              DmlDAOInstance.updateRecords(conList);
+             Update conList;
+
             }
    
         }
@@ -305,8 +298,8 @@ public class AccountTriggerHandler
 
           if(conList.size() > 0)
           {
-           // Update conList;
-            DmlDAOInstance.updateRecords(conList);
+            Update conList;
+
           }
 
         }
@@ -366,10 +359,31 @@ public class AccountTriggerHandler
 
           if(conList.size() > 0)
           {
-           // Update conList;
-            DmlDAOInstance.updateRecords(conList);
+              Update conList;
           }
 
         }
-   }
+    
+          Public List<contact> getContactForUpdateAccountPhoneToContact(Set<Id> accids)
+          {
+             return accountDOAInstance.getContactForUpdateAccountPhoneToContact(accids);
+           }
+    
+          Public List<contact> getContactForUpdateAccountBillingAddressToContact(Set<Id> accids)
+          {
+             return accountDOAInstance.getContactForUpdateAccountBillingAddressToContact(accids);
+           }
+    
+           Public List<Account> getContactForUpdateAccountPhoneToContactSOQL(Set<Id> accids)
+          {
+             return accountDOAInstance.getContactForUpdateAccountPhoneToContactSOQL(accids);
+           }
+    
+          Public List<Account> getContactUpdateAccountBillingAddressToContactSOQL(Set<Id> accids)
+          {
+             return accountDOAInstance.getContactUpdateAccountBillingAddressToContactSOQL(accids);
+           }
 
+
+
+   }
