@@ -4,8 +4,6 @@ public class CaseTriggerHandler
      *  
      */
 
-    @testVisible static IDml DmlDAOInstance = new DmlBase();
-
     Public Static void UpdateLatestCaseNumber(List<Case> caseList)
     {
        
@@ -35,14 +33,12 @@ public class CaseTriggerHandler
           
         if(!accList.isEmpty())
         {
-            DmlDAOInstance.updateRecords(accList);
-           //update accList;
+           update accList;
         }
 
         if(!createNewAcc.isEmpty())
         {
-            DmlDAOInstance.insertRecords(createNewAcc);
-           //Insert createNewAcc;
+           Insert createNewAcc;
         }
 
         for(Account acc : createNewAcc)
@@ -56,8 +52,7 @@ public class CaseTriggerHandler
 
         if(!caseListToUpdate.isEmpty())
         {
-            DmlDAOInstance.updateRecords(caseListToUpdate);
-            //Update caseListToUpdate;
+            Update caseListToUpdate;
         }
     }
 }

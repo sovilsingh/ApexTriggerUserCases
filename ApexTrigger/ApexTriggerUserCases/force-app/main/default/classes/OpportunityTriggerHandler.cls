@@ -1,7 +1,5 @@
 public  class OpportunityTriggerHandler
 {
-   
-    @testVisible static IDml DmlDAOInstance = new DmlBase();
     @testVisible static IOpportunityDAO oppDAOInstance = new OpportunityDAO();     
    
 
@@ -50,9 +48,7 @@ public  class OpportunityTriggerHandler
 
        if(!accList.isEmpty())
        {
-
-        DmlDAOInstance.updateRecords(accList);
-        //Update accList;
+        Update accList;
        }
       
     }
@@ -100,8 +96,7 @@ public  class OpportunityTriggerHandler
 
         if(taskList.size()>0)
         {
-            DmlDAOInstance.insertRecords(taskList);
-            //Insert taskList;
+           Insert taskList;
         }
     }
 
