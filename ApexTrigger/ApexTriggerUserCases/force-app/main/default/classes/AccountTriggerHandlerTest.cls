@@ -16,9 +16,8 @@ public class AccountTriggerHandlerTest
        
         //Create Sample Data for the Test
         //Create the List of Account
-       // List<Account> accList = new List<Account>();
-        List<Account> accList = TestDataFactory.createAccount(true);
-        /**
+        List<Account> accList = new List<Account>();
+        
         //Taking Loop in order to create Test Data 
         for(Integer i=0;i<201;i++)
         {   
@@ -36,10 +35,9 @@ public class AccountTriggerHandlerTest
         // AccountDOAMock accmock = new AccountDOAMock();
         // AccountTriggerHandler mock = new AccountTriggerHandler();
         // AccountTriggerHandler.accountDOAMockInstance  = accmock;
-       */
         Test.startTest();
-        //insert accList;
-        AccountTriggerHandler.updateRating(accList);
+         insert accList;
+         //AccountTriggerHandler.updateRating(accList);
          //mock.updateRating(accList);
         Test.stopTest();
        
