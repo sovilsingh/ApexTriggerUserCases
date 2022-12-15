@@ -5,8 +5,16 @@ public class AccountController{
         return accountDoaInstance.getAccountDetails();
     }
     
-    public List<Account> CreateNewAccounts(List<Account> accList){
+     public List<Account> createNewAccounts(List<Account> accList){
         return accountDoaInstance.createAccounts(accList);
     }
     
+     public List<Account> updateOldAccounts(List<Account> accList){
+        return accountDoaInstance.updateAccounts(accList);
+    }
+    
+     public List<Account> deleteOldAccounts(List<Account> accList){
+        return accountDoaInstance.deleteAccounts(accList);
+    }
+     
 }

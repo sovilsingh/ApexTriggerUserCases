@@ -8,4 +8,11 @@ public class AccountControllerMock implements IAccountControllerDOA{
     public List<Account> createAccounts(List<Account> accList){
             return accountsToReturn;
         }
+    
+    public List<Account> updateAccounts(List<Account> accList){
+            return accountsToReturn;
+    }
+    public List<Account> deleteAccounts(List<Account> accList){
+            return accountsToReturn;
+    }
 }

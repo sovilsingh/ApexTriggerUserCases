@@ -10,4 +10,16 @@ public class AccountControllerDOA implements IAccountControllerDOA {
             Insert accListInsert;
             return accListInsert;
         }
+    
+         public List<Account> updateAccounts(List<Account> accList){
+            List<Account> accListUpdate = accList;
+            Update accListUpdate;
+            return accListUpdate;
+          }
+    
+         public List<Account> deleteAccounts(List<Account> accList){
+            List<Account> accListDelete = accList;
+            Delete accListDelete;
+            return accListDelete;
+          }
 }
