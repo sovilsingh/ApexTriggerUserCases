@@ -28,4 +28,8 @@ public with sharing class TestDataFactory {
         String generateId = s_Object.getDescribe().getKeyPrefix() + '0'.repeat(12-lastNumber.length()) + lastNumber;
         return generateId;
     }
+    
+    public static List<Account> getDeletedAccountCheck(List<Account> accList){   
+        return [Select ID, Name From Account Where ID IN : accList];
+    }
 }

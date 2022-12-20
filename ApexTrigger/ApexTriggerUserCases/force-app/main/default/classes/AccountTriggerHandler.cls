@@ -336,7 +336,6 @@ public class AccountTriggerHandler
                           con.MailingStreet = accToAccountMap.get(con.AccountID).BillingStreet;
                           
                        }
-
                        conList.add(con);
           }
           */
