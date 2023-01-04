@@ -1,16 +1,17 @@
 /**  Trigger Scenario
- *   
+ *   ==============================
  * Upon Opportunity record creation if Amount is between
  * 100000 to 500000 then populate ‘Hot Opportunity’ in
  * description field.
  * 
  * Trigger Scenario
- * 
+ * ================================
  * When an Opportunity is created on any Account, put
  * the latest opportunity Amount on the Account in the
  ‘ Latest Opportunity Amount’ field.
  * 
  * Trigger Scenario with Test Class
+ * ===================================
  * Based on Opportunity stage upon Opportunity creation
  * or updation, set the Description field as:
  * -Opportunity is Closed Lost or
@@ -22,6 +23,9 @@
  * When an Opportunity Stage is changed, then create a
  * Task record on Opportunity and assign it to Logged In
  * User / Opportunity Owner.
+ * 
+ * 
+ * 
  * 
  */
 

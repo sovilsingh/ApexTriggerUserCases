@@ -10,6 +10,7 @@
 @isTest
 public class AccountTriggerHandlerTest 
 {
+
     @isTest
     Private static void updateRatingTest()
     {
@@ -304,9 +305,8 @@ public class AccountTriggerHandlerTest
          }
     }
 
-
-     @isTest
-     Private Static void UpdateCopyBillingToShippingTest()
+    @isTest
+    Private Static void UpdateCopyBillingToShippingTest()
     {
        
         List<Account> accList = new List<Account>();
@@ -372,10 +372,9 @@ public class AccountTriggerHandlerTest
         }
     }
 
- 
-    @isTest
-    Private static void BeforeupdateRatingTest()
-    {
+   @isTest
+   Private static void BeforeupdateRatingTest()
+   {
         //Create Sample Data for the Test
         //Create the List of Account
         List<Account> accList = new List<Account>();
@@ -414,9 +413,9 @@ public class AccountTriggerHandlerTest
         }
     }
 
-    @isTest
-    Private Static Void UpdateAccountPhoneToContactTest()
-    {
+   @isTest
+   Private Static Void UpdateAccountPhoneToContactTest()
+   {
        List<Account> accList = new List<Account>();
 
        for(Integer i=0;i<201;i++)
@@ -456,9 +455,9 @@ public class AccountTriggerHandlerTest
         }
     }
 
-    @isTest
-    Private Static Void UpdateAccountPhoneToContactSOQLTest()
-    {
+   @isTest
+   Private Static Void UpdateAccountPhoneToContactSOQLTest()
+   {
        List<Account> accList = new List<Account>();
 
        for(Integer i=0;i<201;i++)
@@ -499,10 +498,9 @@ public class AccountTriggerHandlerTest
 
     }
 
-
-    @isTest
-    Private Static Void UpdateAccountBillingAddressToContactSOQLTest()
-    {
+   @isTest
+   Private Static Void UpdateAccountBillingAddressToContactSOQLTest()
+   {
        List<Account> accList = new List<Account>();
 
        for(Integer i=0;i<201;i++)
@@ -576,9 +574,8 @@ public class AccountTriggerHandlerTest
         }
 
     }
-    
-    
-    @isTest
+      
+   @isTest
    private static void getContactForUpdateAccountPhoneToContactTest()
    { 
     AccountDOAMock  contactDAOMock = new AccountDOAMock ();
@@ -594,8 +591,7 @@ public class AccountTriggerHandlerTest
     System.assertEquals(1, contacts.size(), 'The method should return a contact');
      }
     
-    
-    @isTest
+   @isTest
    private static void getContactForUpdateAccountBillingAddressToContactTest()
    {
     AccountDOAMock  contactDAOMock = new AccountDOAMock ();
@@ -610,7 +606,7 @@ public class AccountTriggerHandlerTest
     System.assertEquals(1, contacts.size(), 'The method should return a contact');
   }
     
-      @isTest
+   @isTest
    private static void getContactForUpdateAccountPhoneToContactSOQLTest()
    {
     AccountDOAMock  contactDAOMock = new AccountDOAMock ();
@@ -625,7 +621,7 @@ public class AccountTriggerHandlerTest
     System.assertEquals(1, accounts.size(), 'The method should return a Account');
   }
     
-     @isTest
+   @isTest
    private static void getContactUpdateAccountBillingAddressToContactSOQLTest()
    {
     AccountDOAMock  contactDAOMock = new AccountDOAMock ();
@@ -639,4 +635,124 @@ public class AccountTriggerHandlerTest
     Test.stopTest();
     System.assertEquals(1, accounts.size(), 'The method should return a Account');
   }
+    
+   @isTest
+   private static void UpdateAccountToOpportunityByActiveFieldTest()
+   {
+       List<Account> accList = new List<Account>();
+       for(Integer i = 0;i < 201;i++)
+       {
+        Account acc = new Account();
+        acc.Name = 'Test'+i;
+        acc.Active__c = 'Yes';
+        accList.add(acc);
+       }
+       Test.startTest();
+       Insert accList;
+       for(Account acc : accList)
+       {
+           acc.Active__c = 'No';
+       }
+       update accList;
+       Test.stopTest();
+       List<Opportunity> oppListToTest = [Select Id, Name, StageName, AccountId From Opportunity 
+                                          where AccountId IN : accList];
+       System.assertEquals(201, oppListToTest.size());
+       
+       for(Opportunity opp : oppListToTest)
+       {
+           System.assertEquals('Closed Lost', opp.StageName);
+       }    
+
+    }
+   
+   @isTest
+   Private static void PreventDeletionTest()
+   {
+       List<Account> accList = new List<Account>();
+       for(Integer i = 0;i < 201;i++)
+       {
+        Account acc = new Account();
+        acc.Name = 'Test'+i;
+        acc.Active__c = 'Yes';
+        accList.add(acc);
+       }
+       Test.startTest();
+       Insert accList;
+       Boolean exceptionThrown = false;
+        try{
+            delete accList;
+        }
+        catch(Exception ex)
+        {
+            exceptionThrown = true;
+            Boolean expectedExceptionThrown = (ex.getMessage().contains('Active Account cannot be deleted'))? true : false;
+            System.assertEquals(true, expectedExceptionThrown, ex.getMessage());
+        }
+            System.assertEquals(true, exceptionThrown,'No exception was thrown');
+            Test.stopTest();
+       
+    }
+    
+    /**
+   @isTest
+   Private static void AccountUpdatePreventTest()
+   {
+       List<Account> accList = new List<Account>();
+       for(Integer i = 0;i < 201;i++)
+       {
+        Account acc = new Account();
+        acc.Name = 'Test'+i;
+        accList.add(acc);
+       }
+       Test.startTest();
+       Insert accList;
+       List<Account> accListToUpdate = new List<Account>();
+       for(Account acc : accList)
+       {
+          acc.Phone = '789654';
+          accListToUpdate.add(acc);
+       }
+       Boolean exceptionThrown = false;
+        try{
+            update accListToUpdate;
+        }
+        catch(Exception ex)
+        {
+            exceptionThrown = true;
+            Boolean expectedExceptionThrown = (ex.getMessage().contains('you cannot update the record which created in last 7 days'))? true : false;
+            System.assertEquals(true, expectedExceptionThrown, ex.getMessage());
+        }
+            System.assertEquals(true, exceptionThrown,'No exception was thrown');
+            Test.stopTest();
+       
+    }
+   **/
+    
+   @isTest
+   Private static void PreventDeletionLabelTest()
+   {
+       List<Account> accList = new List<Account>();
+       for(Integer i = 0;i < 201;i++)
+       {
+        Account acc = new Account();
+        acc.Name = 'Test'+i;
+        acc.Active__c = 'Yes';
+        accList.add(acc);
+       }
+       Test.startTest();
+       Insert accList;
+       Boolean exceptionThrown = false;
+        try{
+            delete accList;
+        }
+        catch(Exception ex)
+        {
+            exceptionThrown = true;
+            Boolean expectedExceptionThrown = (ex.getMessage().contains('Active Account cannot be deleted'))? true : false;
+            System.assertEquals(true, expectedExceptionThrown, ex.getMessage());
+        }
+            System.assertEquals(true, exceptionThrown,'No exception was thrown');
+            Test.stopTest();
+     }
 }

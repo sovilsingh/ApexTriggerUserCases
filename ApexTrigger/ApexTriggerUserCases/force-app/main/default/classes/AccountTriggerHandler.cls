@@ -263,8 +263,8 @@ public class AccountTriggerHandler
    
         }
 
-        Public static void UpdateAccountBillingAddressToContact(List<Account> accList, Map<Id,Account> OldMap)
-        {
+   Public static void UpdateAccountBillingAddressToContact(List<Account> accList, Map<Id,Account> OldMap)
+   {
 
           List<Contact> conList = new List<Contact>();
           Map<ID,Account> accToAccountMap = new Map<ID,Account>();
@@ -304,8 +304,8 @@ public class AccountTriggerHandler
 
         }
 
-        Public static void UpdateAccountBillingAddressToContactSOQL(List<Account> accList, Map<Id,Account> OldMap)
-        {
+   Public static void UpdateAccountBillingAddressToContactSOQL(List<Account> accList, Map<Id,Account> OldMap)
+   {
 
           List<Contact> conList = new List<Contact>();
          // Map<ID,Account> accToAccountMap = new Map<ID,Account>();
@@ -363,23 +363,84 @@ public class AccountTriggerHandler
 
         }
     
-          Public List<contact> getContactForUpdateAccountPhoneToContact(Set<Id> accids)
-          {
+   public Static void UpdateAccountToOpportunityByActiveField(List<Account> accList, Map<Id,Account> OldMap)
+   {
+        List<opportunity> oppList = new List<Opportunity>();
+        Set<Id> accIds = new Set<Id>();
+        for(Account acc : accList)
+        {
+            if(acc.Active__c == 'NO' && oldMap.get(acc.id).Active__c == 'Yes')
+            {
+                accIds.add(acc.id);
+            }
+        }
+        if(!accIds.isEmpty())
+        {
+            List<Opportunity> oppListToUpdate = [Select ID, StageName From Opportunity where AccountID IN : accIds];
+            
+            for(Opportunity opp : oppListToUpdate)
+            {
+                if(opp.StageName != 'Closed Won' && opp.StageName != 'Closed Lost')
+                {
+                    opp.StageName = 'Closed Lost';
+                    oppList.add(opp);
+                }
+            }
+        }       
+        update oppList;    
+    }
+    
+   public static void PreventDeletion(List<Account> accList)
+   {
+       for(Account acc : accList)
+       {
+           if(acc.Active__c == 'Yes')
+           {
+               acc.addError('Active Account cannot be deleted');
+           }
+       }
+   }
+    
+   public static void PreventDeletionLabel(List<Account> accList)
+   {
+       for(Account acc : accList)
+       {
+           if(acc.Active__c == 'Yes')
+           {
+               acc.addError(Label.Prevent_Account_Deletion);
+           }
+       }
+   }
+    
+   public static void AccountUpdatePrevent(List<Account> accList)
+   {
+        for(Account acc : accList)
+       {
+           if(acc.CreatedDate > System.today() - 7)
+           {
+               acc.addError('you cannot update the record which created in last 7 days');
+           }
+       }
+   }
+
+    
+   Public List<contact> getContactForUpdateAccountPhoneToContact(Set<Id> accids)
+   {
              return accountDOAInstance.getContactForUpdateAccountPhoneToContact(accids);
            }
     
-          Public List<contact> getContactForUpdateAccountBillingAddressToContact(Set<Id> accids)
-          {
+   Public List<contact> getContactForUpdateAccountBillingAddressToContact(Set<Id> accids)
+   {
              return accountDOAInstance.getContactForUpdateAccountBillingAddressToContact(accids);
            }
     
-           Public List<Account> getContactForUpdateAccountPhoneToContactSOQL(Set<Id> accids)
-          {
+   Public List<Account> getContactForUpdateAccountPhoneToContactSOQL(Set<Id> accids)
+   {
              return accountDOAInstance.getContactForUpdateAccountPhoneToContactSOQL(accids);
            }
     
-          Public List<Account> getContactUpdateAccountBillingAddressToContactSOQL(Set<Id> accids)
-          {
+   Public List<Account> getContactUpdateAccountBillingAddressToContactSOQL(Set<Id> accids)
+   {
              return accountDOAInstance.getContactUpdateAccountBillingAddressToContactSOQL(accids);
            }
 
